@@ -92,34 +92,10 @@ public:
         genesis.nNonce   = 1990615403;
 
 
-        if(genesis.GetHash() != uint256S("000032bd27c65ec42967b7854a49df222abdfae8d9350a61083af8eab2a25e03") ){
-            arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
-            uint256 thash;
-            while(true){
-								//thash = genesis.FindBestPatternHash(collisions,scratchpad,8,&tmpflag);
-								thash = genesis.GetPoWHash();
-								//printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-                if (UintToArith256(thash) <= hashTarget)
-                    break;
-                genesis.nNonce++;
-                if (genesis.nNonce == 0){
-                    LogPrintf("NONCE WRAPPED, incrementing time\n");
-                    ++genesis.nTime;
-                }
-            }
-            printf("block.nTime = %u \n", genesis.nTime);
-            printf("block.nNonce = %u \n", genesis.nNonce);
-            printf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-            printf("block.nBits = %u \n", genesis.nBits);
-            consensus.hashGenesisBlock=genesis.GetHash();
-        }
-
         consensus.hashGenesisBlock = genesis.GetHash();
 
         assert(consensus.hashGenesisBlock == genesis.GetHash());
-
-        //assert(consensus.hashGenesisBlock == uint256S("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"));
-        //assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000032bd27c65ec42967b7854a49df222abdfae8d9350a61083af8eab2a25e03"));
 
         vSeeds.push_back(CDNSSeedData("139.59.139.105", "139.59.139.105"));
         vSeeds.push_back(CDNSSeedData("104.248.133.94", "104.248.133.94"));
@@ -188,31 +164,7 @@ public:
         //genesis.nFinalCalculation = 2094347097;
 
 
-        if(genesis.GetHash() != uint256S("00d655aae75ceef9bc13fd8c6168177746ce85286d11ef56de959f4e9b6ff6af") ){
-            arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
-            uint256 thash;
-            while(true){
-								//thash = genesis.FindBestPatternHash(collisions,scratchpad,8,&tmpflag);
-								thash = genesis.GetPoWHash();
-                LogPrintf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(),
-                hashTarget.ToString().c_str());
-                if (UintToArith256(thash) <= hashTarget)
-                    break;
-                genesis.nNonce=genesis.nNonce+10000;
-                if (genesis.nNonce == 0){
-                    LogPrintf("NONCE WRAPPED, incrementing time\n");
-                    ++genesis.nTime;
-                }
-            }
-            LogPrintf("block.nTime = %u \n", genesis.nTime);
-            LogPrintf("block.nNonce = %u \n", genesis.nNonce);
-            LogPrintf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-            LogPrintf("block.nBits = %u \n", genesis.nBits);
-            consensus.hashGenesisBlock=genesis.GetHash();
-        }
-
         consensus.hashGenesisBlock = genesis.GetHash();
-
         assert(consensus.hashGenesisBlock == genesis.GetHash());
 
         //consensus.hashGenesisBlock = genesis.GetHash();
