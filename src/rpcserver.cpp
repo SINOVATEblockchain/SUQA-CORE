@@ -273,7 +273,7 @@ static const CRPCCommand vRPCCommands[] =
     { "control",            "help",                   &help,                   true  },
     { "control",            "stop",                   &stop,                   true  },
 
-	{ "stats",              "gettimelockedstat",      &gettimelockedstat,      true  },
+	{ "stats",              "gettermdepositstats",      &gettermdepositstats,      true  },
 
     /* P2P networking */
     { "network",            "getnetworkinfo",         &getnetworkinfo,         true  },
