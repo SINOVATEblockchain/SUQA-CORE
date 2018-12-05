@@ -153,6 +153,57 @@ bool CCoinsViewDB::GetStats(CCoinsStats &stats) const {
     return true;
 }
 
+bool CCoinsViewDB::TermDepositStats(CTermDepositStats &stats) const {
+	    /* It seems that there are no "const iterators" for LevelDB.  Since we
+       only need read operations on it, use a const-cast to get around
+       that restriction.  */
+    boost::scoped_ptr<leveldb::Iterator> pcursor(const_cast<CLevelDBWrapper*>(&db)->NewIterator());
+    pcursor->SeekToFirst();
+     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
+
+	CAmount nNumberTxAmount = 0;
+	CAmount nValueAmount = 0;
+	std::set<uint160> addresses;
+    while (pcursor->Valid()) {
+		boost::this_thread::interruption_point();
+        try {
+            leveldb::Slice slKey = pcursor->key();
+            CDataStream ssKey(slKey.data(), slKey.data()+slKey.size(), SER_DISK, CLIENT_VERSION);
+            char chType;
+            ssKey >> chType;
+            if (chType == DB_COINS) {
+				leveldb::Slice slValue = pcursor->value();
+                CDataStream ssValue(slValue.data(), slValue.data()+slValue.size(), SER_DISK, CLIENT_VERSION);
+				CCoins coins;
+                ssValue >> coins;
+				for (unsigned int i=0; i<coins.vout.size(); i++) {
+					const CTxOut &out = coins.vout[i];
+					vector<vector<unsigned char> > vSolutions;
+					txnouttype whichType;
+					const CScript& prevScript = out.scriptPubKey;
+					if (Solver(prevScript, whichType, vSolutions)){
+						//not matured TermDeposit
+						if ( whichType == TX_CHECKLOCKTIMEVERIFY && out.scriptPubKey.GetTermDepositReleaseBlock()>chainActive.Height()){
+							stats.nTransactions++;
+							nNumberTxAmount += 1;
+							nValueAmount += out.nValue;
+							addresses.insert(uint160(vSolutions[0]));
+						}
+					}else{
+						continue;
+					}
+				}
+			}
+            pcursor->Next();
+        } catch (const std::exception& e) {
+            return error("%s: Deserialize or I/O error - %s", __func__, e.what());
+        }
+	}
+	stats.nAddress = addresses.size();
+    stats.nTotalAmount = nValueAmount;
+    return true;
+}
+
 bool CBlockTreeDB::WriteBatchSync(const std::vector<std::pair<int, const CBlockFileInfo*> >& fileInfo, int nLastFile, const std::vector<const CBlockIndex*>& blockinfo) {
     CLevelDBBatch batch;
     for (std::vector<std::pair<int, const CBlockFileInfo*> >::const_iterator it=fileInfo.begin(); it != fileInfo.end(); it++) {
