@@ -403,21 +403,21 @@ Value setmocktime(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value gettimelockedstat(const Array& params, bool fHelp)
+Value gettermdepositstats(const Array& params, bool fHelp)
 {
 	if (fHelp || params.size() != 0)
         throw runtime_error(
-            "gettimelockedstat\n"
-            "\nReturns the stats of all timelock no.\n"
+            "gettermdepositstats\n"
+            "\nReturns the stats of all term deposits\n"
             "\nResult:\n"
             "[\n"
 			"  \"nAddress\"  (Number) number of address\n"
-            "  \"nTimeLockedTxs\"  (Number) the total of TimeLocked Tx\n"
+            "  \"nTimeLockedTxs\"  (Number) the total number of TimeLocked Tx\n"
             "  \"nTotalTimeLockedValue\"  (number) the total SUQA locked on all wallets\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("gettimelockedstat", "")
-            + HelpExampleRpc("gettimelockedstat", "")
+            + HelpExampleCli("gettermdepositstats", "")
+            + HelpExampleRpc("gettermdepositstats", "")
         );
 	Object ret;
 
