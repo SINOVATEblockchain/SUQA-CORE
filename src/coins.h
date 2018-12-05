@@ -310,6 +310,15 @@ struct CCoinsStats
     CCoinsStats() : nHeight(0), nTransactions(0), nTransactionOutputs(0), nSerializedSize(0), nTotalAmount(0) {}
 };
 
+struct CTermDepositStats
+{
+	int nAddress;
+	uint64_t nTransactions;
+	CAmount nTotalAmount;
+
+	CTermDepositStats() : nAddress(0), nTransactions(0), nTotalAmount(0) {}
+};
+
 
 /** Abstract view on the open txout dataset. */
 class CCoinsView
@@ -332,6 +341,9 @@ public:
     //! Calculate statistics about the unspent transaction output set
     virtual bool GetStats(CCoinsStats &stats) const;
 
+	//! Calculate statistics about term deposit
+    virtual bool TermDepositStats(CTermDepositStats &stats) const;
+
     //! As we use CCoinsViews polymorphically, have a virtual destructor
     virtual ~CCoinsView() {}
 };
@@ -351,6 +363,7 @@ public:
     void SetBackend(CCoinsView &viewIn);
     bool BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock);
     bool GetStats(CCoinsStats &stats) const;
+	bool TermDepositStats(CTermDepositStats &stats) const;
 };
 
 
