@@ -1989,9 +1989,10 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 		CScript scriptPubKey = GetScriptForDestination(CBitcoinAddress(address).Get());
 		//scriptPubKey.SetDestination(address.Get());
 		if (block.vtx[0].vout[1].scriptPubKey != scriptPubKey)
-				return error("ConnectBlock() : coinbase does not pay to the dev address");
+                                return state.DoS(100, error("ConnectBlock(): coinbase does not pay to the dev fund address."), REJECT_INVALID, "bad-cb-dev-fee");
+
 		if (block.vtx[0].vout[1].nValue < GetDevCoin(blockReward))
-				return error("ConnectBlock() : coinbase does not pay enough to dev address");
+                                return state.DoS(100, error("ConnectBlock(): coinbase does not pay enough to the dev fund address."), REJECT_INVALID, "bad-cb-dev-fee");
 
 
     if(pindex->nHeight>=MINERHODLINGHEIGHT && pindex->nHeight<THEUNFORKENING){
