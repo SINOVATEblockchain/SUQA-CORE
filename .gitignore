@@ -35,6 +35,7 @@ src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
 release
+contrib/package/*.flag
 
 src/univalue/gen
 
