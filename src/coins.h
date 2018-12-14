@@ -316,7 +316,14 @@ struct CTermDepositStats
 	uint64_t nTransactions;
 	CAmount nTotalAmount;
 
-	CTermDepositStats() : nAddress(0), nTransactions(0), nTotalAmount(0) {}
+	CAmount 1day;
+	CAmount 2days;
+	CAmount 7days;
+	CAmount 14days;
+	CAmount 30days;
+	CAmount More30days;
+	
+	CTermDepositStats() : nAddress(0), nTransactions(0), nTotalAmount(0), 1day(0), 2days(0), 7days(0), 14days(0), 30days(0), More30days(0) {}
 };
 
 
