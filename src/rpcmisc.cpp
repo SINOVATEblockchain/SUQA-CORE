@@ -420,13 +420,24 @@ Value gettermdepositstats(const Array& params, bool fHelp)
             + HelpExampleRpc("gettermdepositstats", "")
         );
 	Object ret;
+    Array distribution;
 
+		
 	CTermDepositStats stats;
 	FlushStateToDisk();
 	if (pcoinsTip->TermDepositStats(stats)) {
-        ret.push_back(Pair("nAddress", (int)stats.nAddress));
+		Object obj;
+              ret.push_back(Pair("nAddress", (int)stats.nAddress));
 		ret.push_back(Pair("nTimeLockedTxs", (int64_t)stats.nTransactions));
 		ret.push_back(Pair("nTotalTimeLockedValue", ValueFromAmount(stats.nTotalAmount)));
+			obj.push_back(Pair("1day", ValueFromAmount(stats.1day)));
+			obj.push_back(Pair("2days", ValueFromAmount(stats.2days)));
+			obj.push_back(Pair("7days", ValueFromAmount(stats.7days)));
+			obj.push_back(Pair("14days", ValueFromAmount(stats.14days)));
+			obj.push_back(Pair("30days", ValueFromAmount(stats.30days)));
+			obj.push_back(Pair("More30days", ValueFromAmount(stats.More30days)));
+              distribution.push_back(obj);
+		ret.push_back(Pair("distribution", distribution));
     }
 
 	return ret;
