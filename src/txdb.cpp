@@ -190,17 +190,17 @@ bool CCoinsViewDB::TermDepositStats(CTermDepositStats &stats) const {
 							addresses.insert(uint160(vSolutions[0]));
 							int nBlockMatured = out.scriptPubKey.GetTermDepositReleaseBlock() - chainActive.Height();
 							if (nBlockMatured <= 720){
-								stats.1day += out.nValue;
+								stats.n1day += out.nValue;
 							} else if (720 < nBlockMatured && nBlockMatured <= 1440){
-								stats.2days += out.nValue;
+								stats.n2days += out.nValue;
 							} else if (1440 < nBlockMatured && nBlockMatured <= 5040){
-								stats.7days += out.nValue;
+								stats.n7days += out.nValue;
 							} else if (5040 < nBlockMatured && nBlockMatured <= 10080){
-								stats.14days += out.nValue;
+								stats.n14days += out.nValue;
 							} else if (10080 < nBlockMatured && nBlockMatured <= 21600){
-								stats.30days += out.nValue;
+								stats.n30days += out.nValue;
 							} else {
-								stats.More30days += out.nValue;
+								stats.nMore30days += out.nValue;
 							}
 						}
 					}else{
