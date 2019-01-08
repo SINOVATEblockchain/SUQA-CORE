@@ -166,7 +166,11 @@ static int THREEMONTHS=THIRTYDAYS*3;
 static uint64_t rateTable[BLOCKSPERDAY*365+1];
 static uint64_t bonusTable[BLOCKSPERDAY*365+1];
 
-CAmount getBonusForAmount(int periods, CAmount theAmount){
+CAmount getBonusForAmount(int periods, CAmount theAmount)
+{
+    // dont accept negative timespan/amounts
+    if (periods <= 0 || theAmount <= 0)
+        return 0;
 
     CBigNum amount256(theAmount);
     CBigNum rate256(bonusTable[periods]);
@@ -175,7 +179,11 @@ CAmount getBonusForAmount(int periods, CAmount theAmount){
     return result.getuint64()-theAmount;
 }
 
-CAmount getRateForAmount(int periods, CAmount theAmount){
+CAmount getRateForAmount(int periods, CAmount theAmount)
+{
+    // dont accept negative timespan/amounts
+    if (periods <= 0 || theAmount <= 0)
+        return 0;
 
     CBigNum amount256(theAmount);
     CBigNum rate256(rateTable[periods]);
